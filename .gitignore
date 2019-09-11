@@ -1,0 +1,5 @@
+# VSCode Dumps & Workspace Settings
+.vscode
+
+# Node dev modules
+node_modules
