@@ -2,7 +2,9 @@
 <h2><p align=center>⚠️ NONFUNCTIONAL - WIP! ⚠️ </p></h2>
 <h2><p align=center>🐉 Here be dragons! 🐉</p></h2>
 
-<p align=center><img src="https://badge.fury.io/js/%40rbxts%2Ftrello.svg"></p>
+<a href="https://www.npmjs.com/package/@rbxts/trello">
+    <p align=center><img src="https://badge.fury.io/js/%40rbxts%2Ftrello.svg"></p>
+</a>
 
 This NPM Package will wrap [HypheX's Trello API Module](https://github.com/HypheX/roblox-trello/tree/v2-dev) in TypeScript for [roblox-ts](https://roblox-ts.github.io), with the purpose of unlocking this type of functionality to developers without having to fiddle with setting up complicated modules.
 
