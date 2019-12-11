@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/trello",
-  "version": "2.0.0-dev.7.3",
+  "version": "2.0.0-dev.8",
   "description": "A library to communicate with the Trello API endpoints.",
   "main": "src/init.lua",
   "typings": "types.d.ts",

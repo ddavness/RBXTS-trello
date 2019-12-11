@@ -21,7 +21,7 @@
  *  Represents a Trello Account. Trello Entities are used to hold the API authentication string and to assign boards to.
  *  You can create and handle more than one TrelloEntity at a given time, effectively controlling more than two accounts at the same time.
  */
-interface TrelloEntity {
+interface Entity {
     /** The authentication string that is appended at the end of the API URL's. DO NOT EXPOSE THIS STRING TO THE CLIENT! */
     readonly Auth: string;
 
@@ -52,10 +52,10 @@ interface TrelloEntityConstructor {
      *
      *  @returns
      */
-    new (key: string, token?: string | undefined, pedanticAssert?: boolean): TrelloEntity | undefined;
+    new (key: string, token?: string | undefined, pedanticAssert?: boolean): Entity | undefined;
 }
 
-interface TrelloBoard {
+interface Board {
     readonly RemoteId: string;
     Name: string;
     Description: string;
@@ -85,7 +85,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns A new TrelloBoard that was freshly created.
      */
-    new (entity: TrelloEntity, name: string, public?: boolean): TrelloBoard;
+    new (entity: Entity, name: string, public?: boolean): Board;
 
     /**
      *  @yields Fetches a TrelloBoard from Trello.
@@ -95,7 +95,16 @@ interface TrelloBoardConstructor {
      *
      *  @returns The Trello Board fetched. Undefined if the board doesn't exist.
      */
-    fromRemote(entity: TrelloEntity, remoteId: string): TrelloBoard | undefined;
+    fromRemote(entity: Entity, remoteId: string): Board | undefined;
+
+    /**
+     *  @yields Fetches all the boards the provided entity has edit access to.
+     *
+     *  @param entity The entity where to fetch the boards from.
+     *
+     *  @returns An array containing zero or more trello boards.
+     */
+    fetchAllFrom(entity: Entity): Array<Board>;
 }
 
 declare const TrelloEntity: TrelloEntityConstructor;
