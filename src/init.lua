@@ -19,12 +19,12 @@
 --]]
 
 -- Module Global Version
-local VERSION = "2.0.0-dev.7"
+local VERSION = "2.0.0-dev.8"
 local HTTP = require(script.TrelloHttp)
 local CLASS = require(script.TrelloClass)
 
 -- TrelloEntity Metatable
-local META_TrelloEntity = {
+local TrelloEntityMeta = {
     __tostring = "TrelloEntity",
 
     __metatable = "TrelloEntity",
@@ -105,19 +105,19 @@ function TrelloEntity.new(key, token, pedantic_assert)
     end
 
     -- All tests passed, we can make the TrelloEntity.
-    local TrelloEntity = {}
-    TrelloEntity.Auth = AUTH_STR
-    TrelloEntity.User = dummyRequest.Body.fullName
+    local trelloEntity = {}
+    trelloEntity.Auth = AUTH_STR
+    trelloEntity.User = dummyRequest.Body.fullName
 
     --[[**
         Creates a syntactically correct URL for use within the module. Authentication is automatically appended.
 
         @param [t:String] page The page that you wish to request to. Base URL is https://api.trello.com/1/ (page cannot be empty).
         @param [t:Variant<Dictionary,nil>] query_fields A dictionary (indexes must to be strings) with any extra fields you want to query the API with.
-        
+
         @returns [t:String] A URL string you can make requests to.
     **--]]
-    function TrelloEntity:MakeURL(page, query_fields)
+    function trelloEntity:MakeURL(page, query_fields)
         if not page or page == "" then
             error("[TrelloEntity.MakeURL]: Page argument is empty!", 0)
         end
@@ -143,7 +143,7 @@ function TrelloEntity.new(key, token, pedantic_assert)
                 error("[TrelloEntity.MakeURL]: query_fields must to be a dictionary and all indexes must to be strings!", 0)
             end
 
-            if type(value) == "table" and not value[0] then
+            if type(value) == "table" and not value[1] then
                 -- This is a dictionary
                 for i, v in pairs(value) do
                     queryURL = queryURL .. field .. "/" .. i .. "=" .. toURL(v) .. "&"
@@ -157,15 +157,15 @@ function TrelloEntity.new(key, token, pedantic_assert)
     end
 
     if token and token ~= "" then
-        print("[TrelloEntity.new]: Successfully authenticated as " .. TrelloEntity.User .. ". Welcome!")
+        print("[TrelloEntity.new]: Successfully authenticated as " .. trelloEntity.User .. ". Welcome!")
     else
         print("[TrelloEntity.new]: Added new userless entity.")
         warn("[TrelloEntity.new]: This entity can only read public boards.")
     end
-    return setmetatable(TrelloEntity, META_TrelloEntity)
+    return setmetatable(trelloEntity, TrelloEntityMeta)
 end
 
 warn("Using Roblox-Trello, VERSION " .. VERSION .. ".")
 
-CLASS.TrelloEntity = TrelloEntity
+CLASS.Entity = TrelloEntity
 return CLASS

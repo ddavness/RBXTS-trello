@@ -1,0 +1,21 @@
+{
+  "name": "roblox-trello",
+  "tree": {
+    "$className": "DataModel",
+    "HttpService": {
+      "$className": "HttpService",
+      "$properties": {
+        "HttpEnabled": true
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Trello": {
+        "$path": "src"
+      },
+      "Tests": {
+        "$path": "tests"
+      }
+    }
+  }
+}

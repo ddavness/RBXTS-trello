@@ -21,7 +21,7 @@
 local HTTP = require(script.Parent.Parent.TrelloHttp)
 
 -- TrelloBoard Metatable
-local META_TrelloBoard = {
+local TrelloBoardMeta = {
     __tostring = "TrelloBoard",
 
     __metatable = "TrelloBoard",
@@ -98,13 +98,47 @@ function TrelloBoard.fromRemote(entity, remoteId)
     return makeBoard(entity, result.Body)
 end
 
+--[[**
+    Fetches all the boards the provided entity has edit access to.
+
+    @param [t:TrelloEntity] entity The entity where to fetch the boards from.
+
+    @returns [t:Array<TrelloBoard>] An array containing zero or more trello boards.
+**--]]
+function TrelloBoard.fetchAllFrom(entity)
+    if not entity or getmetatable(entity) ~= "TrelloEntity" then
+        error("[TrelloBoard.fromRemote]: Invalid entity!", 0)
+    end
+
+    local commitURL = entity:MakeURL("/members/me/boards", {
+        filter = "open",
+        fields = {"name","desc","descData","closed","prefs"},
+        lists = "all",
+        memberships = "none",
+        organization = false,
+        organization_fields = ""
+    })
+
+    print(commitURL)
+
+    local result = HTTP.RequestInsist(commitURL, HTTP.HttpMethod.GET, nil, true)
+    local body = result.Body
+    local boards = {}
+
+    for _, b in pairs(body) do
+        table.insert(boards, makeBoard(entity, b))
+    end
+
+    return boards
+end
+
 -- Prototype implementation
 makeBoard = function(entity, data)
     if not data then
         return nil
     end
 
-    local TrelloBoard = {
+    local trelloBoard = {
         RemoteId = data.id,
         Name = data.name,
         Description = data.desc,
@@ -125,13 +159,13 @@ makeBoard = function(entity, data)
 
         @returns [t:Void]
     **--]]
-    function TrelloBoard:Commit(force)
+    function trelloBoard:Commit(force)
         local count = 0
         local commit = {}
 
-        for i, v in pairs (TrelloBoard._Remote) do
-            if (v ~= TrelloBoard[i]) or force then
-                commit[i] = TrelloBoard[i]
+        for i, v in pairs (self._Remote) do
+            if v ~= self[i] or force then
+                commit[i] = self[i]
                 count = count + 1
             end
         end
@@ -140,7 +174,7 @@ makeBoard = function(entity, data)
             warn("[Trello/Board.Commit]: Nothing to change. Skipping")
         end
 
-        local commitURL = entity:MakeURL("/boards/"..TrelloBoard.RemoteId, {
+        local commitURL = entity:MakeURL("/boards/"..self.RemoteId, {
             name = commit.Name,
             desc = commit.Description,
             closed = commit.Closed,
@@ -152,7 +186,7 @@ makeBoard = function(entity, data)
         HTTP.RequestInsist(commitURL, HTTP.HttpMethod.PUT, "{}", true)
 
         for i, v in pairs(commit) do
-            TrelloBoard._Remote[i] = v
+            self._Remote[i] = v
         end
     end
 
@@ -161,15 +195,15 @@ makeBoard = function(entity, data)
 
         @returns [t:Void]
     **--]]
-    function TrelloBoard:Delete()
-        local commitURL = entity:MakeURL("/boards/" .. TrelloBoard.RemoteId)
+    function trelloBoard:Delete()
+        local commitURL = entity:MakeURL("/boards/" .. self.RemoteId)
 
         HTTP.RequestInsist(commitURL, HTTP.HttpMethod.DELETE, nil, true)
 
-        TrelloBoard = nil
+        trelloBoard = nil
     end
 
-    return setmetatable(TrelloBoard, META_TrelloBoard)
+    return setmetatable(trelloBoard, TrelloBoardMeta)
 end
 
 return TrelloBoard
