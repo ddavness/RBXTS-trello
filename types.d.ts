@@ -107,7 +107,7 @@ interface TrelloBoardConstructor {
     fetchAllFrom(entity: Entity): Array<Board>;
 }
 
-declare const TrelloEntity: TrelloEntityConstructor;
+declare const Entity: TrelloEntityConstructor;
 declare const Board: TrelloBoardConstructor;
 
-export { TrelloEntity, Board };
+export { Entity, Board };
