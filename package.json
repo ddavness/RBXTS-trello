@@ -11,6 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/ddavness/RBXTS-trello.git"
   },
+  "files": [
+    "src",
+    "types.d.ts"
+  ],
   "keywords": [
     "roblox-ts",
     "roblox",
