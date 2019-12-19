@@ -19,13 +19,13 @@
 
 /**
  *  Represents a Trello Account. Trello Entities are used to hold the API authentication string and to assign boards to.
- *  You can create and handle more than one TrelloEntity at a given time, effectively controlling more than two accounts at the same time.
+ *  You can create and handle more than one TrelloClient at a given time, effectively controlling more than two accounts at the same time.
  */
-interface Entity {
+interface Client {
     /** The authentication string that is appended at the end of the API URL's. DO NOT EXPOSE THIS STRING TO THE CLIENT! */
     readonly Auth: string;
 
-    /** The username associated with the Trello account being managed by this TrelloEntity. */
+    /** The username associated with the Trello account being managed by this TrelloClient. */
     readonly User: string | undefined;
 
     /**
@@ -42,9 +42,9 @@ interface Entity {
     ): string;
 }
 
-interface TrelloEntityConstructor {
+interface TrelloClientConstructor {
     /**
-     *  @constructor @yields Creates a new TrelloEntity, that represents a Trello account.
+     *  @constructor @yields Creates a new TrelloClient, that represents a Trello account.
      *
      *  @param key Your developer key. Cannot be empty or undefined.
      *  @param token Your developer token. Optional if you're only READING from a PUBLIC board.
@@ -52,7 +52,7 @@ interface TrelloEntityConstructor {
      *
      *  @returns
      */
-    new (key: string, token?: string | undefined, pedanticAssert?: boolean): Entity | undefined;
+    new (key: string, token?: string | undefined, pedanticAssert?: boolean): Client | undefined;
 }
 
 interface Board {
@@ -85,7 +85,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns A new TrelloBoard that was freshly created.
      */
-    new (entity: Entity, name: string, public?: boolean): Board;
+    new (entity: Client, name: string, public?: boolean): Board;
 
     /**
      *  @yields Fetches a TrelloBoard from Trello.
@@ -95,7 +95,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns The Trello Board fetched. Undefined if the board doesn't exist.
      */
-    fromRemote: (entity: Entity, remoteId: string) => Board | undefined;
+    fromRemote: (entity: Client, remoteId: string) => Board | undefined;
 
     /**
      *  @yields Fetches all the boards the provided entity has edit access to.
@@ -104,7 +104,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns An array containing zero or more trello boards.
      */
-    fetchAllFrom: (entity: Entity) => Array<Board>;
+    fetchAllFrom: (entity: Client) => Array<Board>;
 }
 
 // Unimplemented interfaces
@@ -131,6 +131,8 @@ interface Card {
     Labels: Array<Label>
 
     Comment(comment: string): void;
+    AssignLabels(label: Array<Label>): void;
+    
 }
 
 interface TrelloCardConstructor {
@@ -166,7 +168,7 @@ interface TrelloLabelConstructor {
     new (board: Board, name: string, color: LabelColor): Label
 }
 
-declare const Entity: TrelloEntityConstructor;
+declare const Client: TrelloClientConstructor;
 declare const Board: TrelloBoardConstructor;
 
-export { Entity, Board };
+export { Client, Board };
