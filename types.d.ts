@@ -56,11 +56,11 @@ interface TrelloEntityConstructor {
 }
 
 interface Board {
-    readonly RemoteId: string;
-    Name: string;
-    Description: string;
-    Public: boolean;
-    Closed: boolean;
+    readonly RemoteId: string,
+    Name: string,
+    Description: string,
+    Public: boolean,
+    Closed: boolean,
 
     /**
      *  Pushes all metadata changes to Trello. (Doesn't apply to lists, cards, etc.)
@@ -109,7 +109,10 @@ interface TrelloBoardConstructor {
 
 // Unimplemented interfaces
 interface List {
-
+    readonly RemoteId: string,
+    Board: Board,
+    Archived: boolean,
+    Name: string
 }
 
 interface TrelloListConstructor {
@@ -120,7 +123,14 @@ interface TrelloListConstructor {
 }
 
 interface Card {
+    readonly RemoteId: string,
+    List: List,
+    Archived: boolean,
+    Name: string,
+    Description: string,
+    Labels: Array<Label>
 
+    Comment(comment: string): void;
 }
 
 interface TrelloCardConstructor {
@@ -144,8 +154,12 @@ interface LabelColor {
     readonly Purple: string;
     readonly Pink: string;
 }
+
 interface Label {
-    
+    readonly RemoteId: string;
+    readonly Board: Board;
+    name: string,
+    color: LabelColor
 }
 
 interface TrelloLabelConstructor {
