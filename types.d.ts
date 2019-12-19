@@ -77,7 +77,7 @@ interface Board {
 
 interface TrelloBoardConstructor {
     /**
-     *  @constructor @yields Creates a new TrelloBoard, that represents a Trello board, that is then also created on Trello.
+     *  @constructor @yields Creates a new Trello board, that is then also created on Trello.
      *
      *  @param entity The entity the board will be assigned to.
      *  @param name The Board's name. Must to be a non-empty string with a maximum of 16384 characters.
@@ -105,6 +105,51 @@ interface TrelloBoardConstructor {
      *  @returns An array containing zero or more trello boards.
      */
     fetchAllFrom: (entity: Entity) => Array<Board>;
+}
+
+// Unimplemented interfaces
+interface List {
+
+}
+
+interface TrelloListConstructor {
+    /**
+     * @constructor @yields Creates a new Trello list and appends it to the given board.
+     */
+    new (board: Board, title: string): List;
+}
+
+interface Card {
+
+}
+
+interface TrelloCardConstructor {
+    /**
+     * @constructor @yields Creates a new Trello board and appends it to the bottom of the given list.
+     */
+    new (list: List, name: string, description: string): Card;
+
+}
+
+interface LabelColor {
+    readonly None: string;
+    readonly Black: string;
+    readonly Red: string;
+    readonly Orange: string;
+    readonly Yellow: string;
+    readonly LimeGreen: string;
+    readonly Green: string;
+    readonly SkyBlue: string;
+    readonly Blue: string;
+    readonly Purple: string;
+    readonly Pink: string;
+}
+interface Label {
+    
+}
+
+interface TrelloLabelConstructor {
+    new (board: Board, name: string, color: LabelColor): Label
 }
 
 declare const Entity: TrelloEntityConstructor;
