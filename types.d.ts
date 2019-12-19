@@ -95,7 +95,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns The Trello Board fetched. Undefined if the board doesn't exist.
      */
-    fromRemote(entity: Entity, remoteId: string): Board | undefined;
+    fromRemote: (entity: Entity, remoteId: string) => Board | undefined;
 
     /**
      *  @yields Fetches all the boards the provided entity has edit access to.
@@ -104,7 +104,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns An array containing zero or more trello boards.
      */
-    fetchAllFrom(entity: Entity): Array<Board>;
+    fetchAllFrom: (entity: Entity) => Array<Board>;
 }
 
 declare const Entity: TrelloEntityConstructor;
