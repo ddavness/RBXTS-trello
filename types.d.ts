@@ -57,24 +57,29 @@ interface TrelloClientConstructor {
         : Client | undefined;
 }
 
-interface Board {
+// Trello Entities
+interface Entity {
     readonly RemoteId: string;
+    readonly Loaded: boolean;
     Name: string;
-    Description: string;
-    Public: boolean;
-    Closed: boolean;
 
     /**
-     *  Pushes all metadata changes to Trello. (Doesn't apply to lists, cards, etc.)
+     *  Pushes all metadata changes to Trello. (Doesn't apply to subentities.)
      *
-     *  @param force Whether to push all changes to the board even though nothing has been changed.
+     *  @param force Whether to push all changes to Trello even though nothing has been changed.
      */
     Commit(force?: boolean): void;
 
     /**
-     *  Deletes this board from Trello. All garbage collection is up to the developer to perform.
+     *  Deletes this entity (and subentities) from Trello.
      */
     Delete(): void;
+}
+
+interface Board extends Entity {
+    Description: string;
+    Public: boolean;
+    Closed: boolean;
 }
 
 interface TrelloBoardConstructor {
@@ -110,11 +115,9 @@ interface TrelloBoardConstructor {
 }
 
 // Unimplemented interfaces
-interface List {
-    readonly RemoteId: string;
+interface List extends Entity {
     Board: Board;
     Archived: boolean;
-    Name: string;
 }
 
 interface TrelloListConstructor {
@@ -124,11 +127,9 @@ interface TrelloListConstructor {
     new (title: string, board: Board): List;
 }
 
-interface Card {
-    readonly RemoteId: string;
+interface Card extends Entity {
     List: List;
     Archived: boolean;
-    Name: string;
     Description: string;
     Labels: Array<Label>;
 
@@ -157,10 +158,8 @@ interface LabelColor {
     readonly Pink: string;
 }
 
-interface Label {
-    readonly RemoteId: string;
+interface Label extends Entity {
     readonly Board: Board;
-    name: string;
     color: LabelColor;
 }
 
