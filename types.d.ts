@@ -48,11 +48,11 @@ interface TrelloClientConstructor {
      *
      *  @param key Your developer key. Cannot be empty or undefined.
      *  @param token Your developer token. Optional if you're only READING from a PUBLIC board.
-     *  @param pedanticAssert Whether an error should be thrown (instead of a warning) if key validation fails.
+     *  @param errorOnFailure Whether an error should be thrown (instead of a warning) if key validation fails.
      *
-     *  @returns
+     *  @returns a client object. If 'errorOnFailure` is false, the constructor might return `undefined` if key validation fails
      */
-    new (key: string, token?: string | undefined, pedanticAssert?: boolean): Client | undefined;
+    new <Err extends boolean>(key: string, token?: string | undefined, errorOnFailure?: Err): Err extends true ? Client : Client | undefined;
 }
 
 interface Board {
