@@ -85,7 +85,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns A new TrelloBoard that was freshly created.
      */
-    new (entity: Client, name: string, public?: boolean): Board;
+    new (name: string, public: boolean, entity: Client): Board;
 
     /**
      *  @yields Fetches a TrelloBoard from Trello.
@@ -95,7 +95,7 @@ interface TrelloBoardConstructor {
      *
      *  @returns The Trello Board fetched. Undefined if the board doesn't exist.
      */
-    fromRemote: (entity: Client, remoteId: string) => Board | undefined;
+    fromRemote: (remoteId: string, entity: Client) => Board | undefined;
 
     /**
      *  @yields Fetches all the boards the provided entity has edit access to.
@@ -119,7 +119,7 @@ interface TrelloListConstructor {
     /**
      * @constructor @yields Creates a new Trello list and appends it to the given board.
      */
-    new (board: Board, title: string): List;
+    new (title: string, board: Board): List;
 }
 
 interface Card {
@@ -132,14 +132,13 @@ interface Card {
 
     Comment(comment: string): void;
     AssignLabels(label: Array<Label>): void;
-    
 }
 
 interface TrelloCardConstructor {
     /**
      * @constructor @yields Creates a new Trello board and appends it to the bottom of the given list.
      */
-    new (list: List, name: string, description: string): Card;
+    new (name: string, description: string, list: List): Card;
 
 }
 
@@ -165,7 +164,7 @@ interface Label {
 }
 
 interface TrelloLabelConstructor {
-    new (board: Board, name: string, color: LabelColor): Label
+    new (name: string, color: LabelColor, board: Board): Label
 }
 
 declare const Client: TrelloClientConstructor;
