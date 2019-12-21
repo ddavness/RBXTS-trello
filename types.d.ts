@@ -52,15 +52,17 @@ interface TrelloClientConstructor {
      *
      *  @returns a client object. If 'errorOnFailure` is false, the constructor might return `undefined` if key validation fails
      */
-    new <Err extends boolean>(key: string, token?: string | undefined, errorOnFailure?: Err): Err extends true ? Client : Client | undefined;
+    new <Err extends boolean>(key: string, token?: string | undefined, errorOnFailure?: Err): Err extends true
+        ? Client
+        : Client | undefined;
 }
 
 interface Board {
-    readonly RemoteId: string,
-    Name: string,
-    Description: string,
-    Public: boolean,
-    Closed: boolean,
+    readonly RemoteId: string;
+    Name: string;
+    Description: string;
+    Public: boolean;
+    Closed: boolean;
 
     /**
      *  Pushes all metadata changes to Trello. (Doesn't apply to lists, cards, etc.)
@@ -109,10 +111,10 @@ interface TrelloBoardConstructor {
 
 // Unimplemented interfaces
 interface List {
-    readonly RemoteId: string,
-    Board: Board,
-    Archived: boolean,
-    Name: string
+    readonly RemoteId: string;
+    Board: Board;
+    Archived: boolean;
+    Name: string;
 }
 
 interface TrelloListConstructor {
@@ -123,12 +125,12 @@ interface TrelloListConstructor {
 }
 
 interface Card {
-    readonly RemoteId: string,
-    List: List,
-    Archived: boolean,
-    Name: string,
-    Description: string,
-    Labels: Array<Label>
+    readonly RemoteId: string;
+    List: List;
+    Archived: boolean;
+    Name: string;
+    Description: string;
+    Labels: Array<Label>;
 
     Comment(comment: string): void;
     AssignLabels(label: Array<Label>): void;
@@ -139,7 +141,6 @@ interface TrelloCardConstructor {
      * @constructor @yields Creates a new Trello board and appends it to the bottom of the given list.
      */
     new (name: string, description: string, list: List): Card;
-
 }
 
 interface LabelColor {
@@ -159,12 +160,12 @@ interface LabelColor {
 interface Label {
     readonly RemoteId: string;
     readonly Board: Board;
-    name: string,
-    color: LabelColor
+    name: string;
+    color: LabelColor;
 }
 
 interface TrelloLabelConstructor {
-    new (name: string, color: LabelColor, board: Board): Label
+    new (name: string, color: LabelColor, board: Board): Label;
 }
 
 declare const Client: TrelloClientConstructor;
