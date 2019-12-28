@@ -69,7 +69,7 @@ interface Entity {
      *
      *  @param force Whether to push all changes to Trello even though nothing has been changed.
      */
-    Commit(force?: boolean): void;
+    Update(force?: boolean): void;
 
     /**
      *  Deletes this entity (and subentities) from Trello.
@@ -171,4 +171,4 @@ interface TrelloLabelConstructor {
 declare const Client: TrelloClientConstructor;
 declare const Board: TrelloBoardConstructor;
 
-export { Client, Board };
+export { Client, Board, Label, LabelColor };
