@@ -61,6 +61,7 @@ interface TrelloClientConstructor {
 interface Entity {
     readonly RemoteId: string;
     readonly Loaded: boolean;
+    readonly Client: Client;
     Name: string;
 
     /**
